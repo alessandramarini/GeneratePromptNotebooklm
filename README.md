@@ -1,0 +1,2 @@
+# GeneratePromptNotebooklm
+genera prompt
