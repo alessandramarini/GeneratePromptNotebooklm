@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Betting Exchange Room AI - Global Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: { 
+          colors: { 
+            cyber: { bg: '#040906', panel: '#0a1410', input: '#020503', accent: '#10b981' } 
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            heading: ['Outfit', 'system-ui', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body { background-color: #040906; color: #e2e8f0; }
+    
+    /* Miglioramento della leggibilità e scrollbar personalizzata verde */
+    .custom-scrollbar::-webkit-scrollbar { width: 8px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(16, 185, 129, 0.4); border-radius: 10px; }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: rgba(16, 185, 129, 0.7); }
+    
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    .panel-glow {
+      box-shadow: 0 0 50px -15px rgba(16, 185, 129, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+  </style>
+</head>
+<body class="min-h-screen font-sans flex flex-col selection:bg-emerald-500/30">
+
+  <!-- HEADER PROFESSIONALE CON LOGO -->
+  <header class="sticky top-0 z-50 bg-[#040906]/90 backdrop-blur-xl border-b border-emerald-900/40 shadow-lg shadow-black/50 py-1">
+    <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-4 sm:gap-5">
+        <!-- Logo Caricato -->
+        <img 
+          src="1000380895.jpg" 
+          alt="Betting Exchange Room AI Logo" 
+          class="w-14 h-14 sm:w-16 sm:h-16 object-contain drop-shadow-[0_0_20px_rgba(16,185,129,0.5)] rounded-full"
+          onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
+        />
+        <!-- Fallback Logo -->
+        <div style="display: none;" class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-emerald-800 rounded-full items-center justify-center text-[#040906] font-black text-2xl border border-emerald-300/30">
+          BX
+        </div>
+        
+        <div class="flex flex-col justify-center">
+          <span class="text-base sm:text-xl md:text-2xl font-heading font-black text-white tracking-widest leading-none">BETTING EXCHANGE ROOM AI</span>
+          <span class="text-[10px] sm:text-xs text-emerald-400 tracking-[0.2em] font-bold uppercase leading-tight flex items-center gap-1.5 mt-2">
+            <i data-lucide="globe-2" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i> Global Creation & Distribution
+          </span>
+        </div>
+      </div>
+      
+      <div class="hidden lg:flex items-center gap-2.5 text-sm text-emerald-100/70 font-medium bg-emerald-900/20 px-4 py-2 rounded-full border border-emerald-800/50">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse shadow-[0_0_10px_rgba(16,185,129,0.8)]"></span>
+        NOTEBOOK-LM SYNCED
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="flex-grow w-full max-w-7xl mx-auto p-5 md:p-8 lg:p-10 flex flex-col lg:flex-row gap-8 lg:gap-10">
+    
+    <!-- SINISTRA: INPUT WORKFLOW -->
+    <section class="w-full lg:w-5/12 flex flex-col gap-6">
+      <div class="mb-2">
+        <h1 class="text-3xl md:text-4xl font-heading font-extrabold text-white leading-tight">
+          Room AI <br class="md:hidden" />
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-emerald-600">Global Studio</span>
+        </h1>
+        <p class="text-slate-300 text-sm md:text-base mt-3 leading-relaxed font-medium">
+          Il motore ufficiale per creare, promuovere e distribuire materiale didattico quantitativo in tutto il mondo tramite NotebookLM.
+        </p>
+      </div>
+
+      <div class="bg-cyber-panel border border-emerald-900/30 rounded-3xl p-6 md:p-8 flex flex-col panel-glow relative overflow-hidden shadow-2xl">
+        <div class="absolute top-0 right-0 w-72 h-72 bg-emerald-600/10 rounded-full blur-3xl pointer-events-none"></div>
+
+        <!-- STEP 1: I 5 FORMATI RICHIESTI -->
+        <div class="mb-8 relative z-10">
+          <label class="text-sm font-heading font-bold text-white flex items-center gap-3 mb-4 uppercase tracking-widest">
+            <span class="bg-emerald-500 text-cyber-bg w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shadow-[0_0_12px_rgba(16,185,129,0.6)]">1</span> 
+            Formato Globale
+          </label>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4" id="format-selector">
+            <button data-format="video" class="format-btn py-4 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-emerald-900/40 border-emerald-500/60 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] flex flex-col items-center justify-center text-center gap-2.5 hover:bg-emerald-900/60">
+              <i data-lucide="video" class="w-6 h-6"></i> Video Class
+            </button>
+            <button data-format="pdf" class="format-btn py-4 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-cyber-input border-slate-800 text-slate-300 hover:border-emerald-700/60 hover:text-emerald-400 flex flex-col items-center justify-center text-center gap-2.5">
+              <i data-lucide="presentation" class="w-6 h-6"></i> Slide PDF
+            </button>
+            <button data-format="infographic" class="format-btn py-4 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-cyber-input border-slate-800 text-slate-300 hover:border-emerald-700/60 hover:text-emerald-400 flex flex-col items-center justify-center text-center gap-2.5">
+              <i data-lucide="bar-chart-2" class="w-6 h-6"></i> Infografica
+            </button>
+            <button data-format="quiz" class="format-btn py-4 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-cyber-input border-slate-800 text-slate-300 hover:border-emerald-700/60 hover:text-emerald-400 flex flex-col items-center justify-center text-center gap-2.5">
+              <i data-lucide="list-checks" class="w-6 h-6"></i> Quiz Accad.
+            </button>
+            <button data-format="podcast" class="format-btn col-span-2 md:col-span-2 py-4 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-cyber-input border-slate-800 text-slate-300 hover:border-emerald-700/60 hover:text-emerald-400 flex flex-col items-center justify-center text-center gap-2.5">
+              <i data-lucide="mic" class="w-6 h-6"></i> Podcast / Audio Debate
+            </button>
+          </div>
+        </div>
+
+        <!-- STEP 2: APPUNTI -->
+        <div class="flex items-center justify-between mb-4 relative z-10 pt-8 border-t border-slate-800/80">
+          <label class="text-sm font-heading font-bold text-white flex items-center gap-3 uppercase tracking-widest">
+            <span class="bg-emerald-500 text-cyber-bg w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shadow-[0_0_12px_rgba(16,185,129,0.6)]">2</span> 
+            Incolla la Fonte
+          </label>
+          <div class="flex items-center gap-3">
+            <button id="btn-clear" class="text-sm py-2 px-4 bg-red-950/40 hover:bg-red-900/60 text-red-400 border border-red-900/50 rounded-lg transition-colors active:scale-95 font-semibold flex items-center gap-2">
+              <i data-lucide="trash-2" class="w-4 h-4"></i> Svuota
+            </button>
+            <button id="btn-load-example" class="text-sm py-2 px-4 bg-slate-800 hover:bg-slate-700 text-slate-200 rounded-lg transition-colors active:scale-95 font-semibold flex items-center gap-2">
+              <i data-lucide="file-input" class="w-4 h-4"></i> Esempio
+            </button>
+          </div>
+        </div>
+        
+        <textarea id="lesson-input" placeholder="Incolla qui gli appunti. L'IA li tradurrà ed elaborerà per la distribuzione mondiale..." class="w-full min-h-[180px] bg-[#020503] text-slate-100 border-2 border-slate-800 rounded-xl p-5 text-base focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 resize-y transition-all placeholder:text-slate-600 custom-scrollbar relative z-10 shadow-inner leading-relaxed"></textarea>
+
+        <!-- STEP 3: LINGUA E TRADUZIONE -->
+        <div class="mb-4 mt-8 relative z-10 pt-8 border-t border-slate-800/80">
+          <label class="text-sm font-heading font-bold text-white flex items-center gap-3 mb-4 uppercase tracking-widest">
+            <span class="bg-emerald-500 text-cyber-bg w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shadow-[0_0_12px_rgba(16,185,129,0.6)]">3</span> 
+            Traduci in Lingua
+          </label>
+          <div class="grid grid-cols-4 gap-3" id="language-selector">
+            <button data-lang="Italiano" class="lang-btn py-3 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-emerald-900/40 border-emerald-500/60 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:bg-emerald-900/60">IT</button>
+            <button data-lang="English" class="lang-btn py-3 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-cyber-input border-slate-800 text-slate-300 hover:border-emerald-700/60 hover:text-emerald-400">EN</button>
+            <button data-lang="Español" class="lang-btn py-3 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-cyber-input border-slate-800 text-slate-300 hover:border-emerald-700/60 hover:text-emerald-400">ES</button>
+            <button data-lang="Português" class="lang-btn py-3 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-cyber-input border-slate-800 text-slate-300 hover:border-emerald-700/60 hover:text-emerald-400">PT</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: GENERA -->
+        <button id="btn-generate" disabled class="mt-8 w-full py-5 rounded-xl font-heading font-extrabold text-xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] relative z-10 bg-slate-800/50 text-slate-500 cursor-not-allowed border-2 border-transparent">
+          <span id="generate-text" class="flex items-center gap-2">
+            Ingegnerizza Distribuzione <i data-lucide="arrow-right" class="w-6 h-6"></i>
+          </span>
+        </button>
+      </div>
+    </section>
+
+    <!-- DESTRA: OUTPUT -->
+    <section id="output-section" class="w-full lg:w-7/12 flex flex-col gap-6 mt-6 lg:mt-0 scroll-mt-32">
+      
+      <div class="mb-2 hidden lg:block">
+        <h2 class="text-3xl md:text-4xl font-heading font-extrabold text-white leading-tight">
+          Output per NotebookLM
+        </h2>
+        <p class="text-slate-300 text-base mt-3 leading-relaxed font-medium">
+          Prompt blindati per il motore RAG di Google. Zero allucinazioni e traduzione forzata.
+        </p>
+      </div>
+
+      <div class="bg-cyber-panel border border-emerald-900/30 rounded-3xl flex flex-col h-full panel-glow overflow-hidden relative shadow-2xl">
+        
+        <!-- HEADER TABS OUTPUT -->
+        <div class="bg-[#050b08] p-3 flex gap-3 border-b border-emerald-900/40">
+          <button id="tab-script" class="tab-btn flex-1 py-4 px-3 md:px-5 text-sm md:text-base font-heading font-bold flex items-center justify-center gap-2.5 transition-all bg-emerald-900/40 text-emerald-400 rounded-xl border-2 border-emerald-500/50 shadow-[0_4px_15px_rgba(16,185,129,0.15)]">
+            <i data-lucide="bot" class="w-5 h-5"></i> Prompt NotebookLM (<span id="tab-lang-label">IT</span>)
+          </button>
+          <button id="tab-visual" class="tab-btn flex-1 py-4 px-3 md:px-5 text-sm md:text-base font-heading font-bold flex items-center justify-center gap-2.5 transition-all text-slate-400 hover:text-white hover:bg-slate-800/60 rounded-xl border-2 border-transparent">
+            <i data-lucide="sparkles" class="w-5 h-5"></i> Immagini (Gemini)
+          </button>
+        </div>
+
+        <div class="flex-grow relative min-h-[450px] md:min-h-[550px] bg-[#020503] p-5 md:p-8">
+          
+          <!-- VUOTO INIZIALE -->
+          <div id="empty-state" class="absolute inset-0 flex flex-col items-center justify-center text-slate-500 p-8 text-center">
+            <div class="w-24 h-24 bg-slate-900/80 rounded-full flex items-center justify-center mb-6 shadow-inner border border-slate-700">
+              <i data-lucide="globe-2" class="w-12 h-12 text-emerald-500/60"></i>
+            </div>
+            <h3 class="text-xl font-heading font-bold text-white mb-3">Network Globale in Standby</h3>
+            <p class="text-base max-w-md leading-relaxed">Completa i passaggi nella colonna di sinistra e clicca genera per istruire i modelli linguistici (NotebookLM & Gemini).</p>
+          </div>
+
+          <!-- RISULTATI -->
+          <div id="result-state" class="hidden h-full flex flex-col">
+            <div class="mb-5 text-sm font-bold text-emerald-500/80 uppercase tracking-widest flex items-center gap-3 pb-4 border-b border-slate-800/60">
+              <span id="target-platform-label" class="flex items-center gap-2.5">
+                <i data-lucide="clipboard-copy" class="w-4 h-4"></i> Da incollare nella chat di NotebookLM
+              </span>
+            </div>
+            
+            <div class="flex-grow overflow-y-auto pr-4 custom-scrollbar mb-24">
+              <pre id="content-script" class="tab-content active whitespace-pre-wrap text-sm md:text-base text-slate-200 font-mono leading-relaxed"></pre>
+              <pre id="content-visual" class="tab-content whitespace-pre-wrap text-sm md:text-base text-slate-200 font-mono leading-relaxed"></pre>
+            </div>
+
+            <!-- PULSANTE COPIA AGGIORNATO (ROBUSTO E GRANDE) -->
+            <div class="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-[#020503] via-[#020503]/95 to-transparent pt-20">
+              <button id="btn-copy" class="w-full py-5 rounded-xl font-heading font-extrabold text-lg flex items-center justify-center gap-3 transition-all shadow-lg active:scale-95 border-2 bg-emerald-600 border-emerald-400 text-cyber-bg hover:bg-emerald-500 shadow-[0_8px_25px_rgba(16,185,129,0.35)]">
+                <i data-lucide="copy" class="w-6 h-6"></i> <span>Copia negli Appunti</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- INSTRUCTION BOX -->
+      <div class="mt-2 text-base text-slate-200 bg-slate-900/60 p-6 rounded-2xl border border-emerald-900/30 flex gap-5 items-start shadow-xl">
+        <div id="instruction-icon-wrapper" class="bg-emerald-900/40 p-3 rounded-xl text-emerald-400 shadow-inner border border-emerald-800/50">
+          <i data-lucide="info" class="w-6 h-6"></i>
+        </div>
+        <div>
+          <h4 class="font-heading font-bold text-white mb-2 uppercase tracking-widest text-sm flex items-center gap-2.5">
+            <span class="bg-emerald-500 text-cyber-bg w-5 h-5 rounded-full flex items-center justify-center text-[10px] font-black">INFO</span>
+            Istruzioni di Distribuzione
+          </h4>
+          <p id="instruction-text" class="leading-relaxed text-sm md:text-base font-medium text-slate-300">
+            Seleziona i parametri e innesca la generazione per visualizzare il prompt operativo per NotebookLM.
+          </p>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    // --- STATE VARIABLES ---
+    let selectedLanguage = 'Italiano';
+    let selectedFormat = 'video'; 
+    let activeTab = 'script'; 
+    let isGenerating = false;
+
+    // --- DOM ELEMENTS ---
+    const lessonInput = document.getElementById('lesson-input');
+    const btnGenerate = document.getElementById('btn-generate');
+    const generateText = document.getElementById('generate-text');
+    const langBtns = document.querySelectorAll('.lang-btn');
+    const formatBtns = document.querySelectorAll('.format-btn');
+    const btnLoadExample = document.getElementById('btn-load-example');
+    const btnClear = document.getElementById('btn-clear');
+    
+    const tabScript = document.getElementById('tab-script');
+    const tabVisual = document.getElementById('tab-visual');
+    const contentScript = document.getElementById('content-script');
+    const contentVisual = document.getElementById('content-visual');
+    const emptyState = document.getElementById('empty-state');
+    const resultState = document.getElementById('result-state');
+    
+    const btnCopy = document.getElementById('btn-copy');
+    const targetPlatformLabel = document.getElementById('target-platform-label');
+    const tabLangLabel = document.getElementById('tab-lang-label');
+    const instructionIconWrapper = document.getElementById('instruction-icon-wrapper');
+    const instructionText = document.getElementById('instruction-text');
+    const outputSection = document.getElementById('output-section');
+
+    const sampleLesson = `🌑 ZERO TO HERO academy [Giorno 1/30]
+▬▬▬▬▬▬▬▬▬▬▬▬▬
+🔍 DIFFERENZA STRUTTURALE: BOOKMAKER VS EXCHANGE
+Nel Betting Exchange agisci come market maker. La differenza fondamentale risiede nel controllo del rischio e nella possibilità di fare trading prima che l'evento abbia inizio.
+
+📐 FORMULA: Profitto Netto = (Stake * (Quota Punta - 1)) - Commissioni
+
+⚠️ RISULTATO: Il profitto netto si ottiene sfruttando il differenziale di quota, eliminando il rischio matematico di rovina del bookmaker tradizionale.`;
+
+    // --- EVENT LISTENERS ---
+
+    lessonInput.addEventListener('input', () => {
+      if (lessonInput.value.trim() !== '' && !isGenerating) enableGenerateBtn();
+      else if (!isGenerating) disableGenerateBtn();
+    });
+
+    btnLoadExample.addEventListener('click', () => {
+      lessonInput.value = sampleLesson;
+      enableGenerateBtn();
+    });
+
+    btnClear.addEventListener('click', () => {
+      lessonInput.value = '';
+      disableGenerateBtn();
+      emptyState.classList.remove('hidden');
+      resultState.classList.add('hidden');
+      updateInstructionText();
+    });
+
+    // Language Selector
+    langBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        langBtns.forEach(b => b.className = "lang-btn py-3 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-cyber-input border-slate-800 text-slate-300 hover:border-emerald-700/60 hover:text-emerald-400");
+        const clickedBtn = e.target;
+        clickedBtn.className = "lang-btn py-3 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-emerald-900/40 border-emerald-500/60 text-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.15)] hover:bg-emerald-900/60";
+        selectedLanguage = clickedBtn.getAttribute('data-lang');
+        tabLangLabel.textContent = selectedLanguage === 'Italiano' ? 'IT' : selectedLanguage === 'English' ? 'EN' : selectedLanguage === 'Español' ? 'ES' : 'PT';
+        updateUIForState();
+        if (lessonInput.value.trim() !== '') enableGenerateBtn();
+      });
+    });
+
+    // Format Selector 
+    formatBtns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const clickedBtn = e.target.closest('button'); 
+        formatBtns.forEach(b => {
+          let extraClasses = b.getAttribute('data-format') === 'podcast' ? 'col-span-2 md:col-span-2' : '';
+          b.className = `format-btn ${extraClasses} py-4 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-cyber-input border-slate-800 text-slate-300 hover:border-emerald-700/60 hover:text-emerald-400 flex flex-col items-center justify-center text-center gap-2.5`;
+        });
+        let activeExtraClasses = clickedBtn.getAttribute('data-format') === 'podcast' ? 'col-span-2 md:col-span-2' : '';
+        clickedBtn.className = `format-btn ${activeExtraClasses} py-4 px-2 text-sm font-bold rounded-xl border-2 transition-all bg-emerald-900/40 border-emerald-500/60 text-emerald-300 shadow-[0_0_20px_rgba(16,185,129,0.2)] flex flex-col items-center justify-center text-center gap-2.5 hover:bg-emerald-900/60`;
+        selectedFormat = clickedBtn.getAttribute('data-format');
+        updateUIForState();
+        if (lessonInput.value.trim() !== '') enableGenerateBtn();
+      });
+    });
+
+    tabScript.addEventListener('click', () => switchTab('script'));
+    tabVisual.addEventListener('click', () => switchTab('visual'));
+
+    btnGenerate.addEventListener('click', () => {
+      if (!lessonInput.value.trim() || isGenerating) return;
+      isGenerating = true;
+      disableGenerateBtn(true);
+      setTimeout(() => {
+        generateContent();
+        isGenerating = false;
+        enableGenerateBtn();
+        setTimeout(() => outputSection.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
+      }, 1200);
+    });
+
+    btnCopy.addEventListener('click', () => {
+      const textToCopy = activeTab === 'script' ? contentScript.textContent : contentVisual.textContent;
+      const textArea = document.createElement("textarea");
+      textArea.value = textToCopy;
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      try {
+        document.execCommand('copy');
+        
+        btnCopy.className = "w-full py-5 rounded-xl font-heading font-extrabold text-lg flex items-center justify-center gap-3 transition-all shadow-lg active:scale-95 border-2 bg-emerald-500 border-emerald-400 text-cyber-bg shadow-[0_0_30px_rgba(16,185,129,0.6)]";
+        btnCopy.innerHTML = `<i data-lucide="check-circle" class="w-6 h-6"></i> <span>Copiato negli appunti!</span>`;
+        lucide.createIcons(); 
+        
+        setTimeout(() => {
+          btnCopy.className = "w-full py-5 rounded-xl font-heading font-extrabold text-lg flex items-center justify-center gap-3 transition-all shadow-lg active:scale-95 border-2 bg-emerald-600 border-emerald-400 text-cyber-bg hover:bg-emerald-500 shadow-[0_8px_25px_rgba(16,185,129,0.35)]";
+          updateCopyButtonText(); // Ripristina il testo normale
+        }, 2000);
+      } catch (err) { console.error('Errore copia', err); }
+      document.body.removeChild(textArea);
+    });
+
+    // --- UI HELPERS ---
+
+    function updateUIForState() {
+      let formatText = "Video";
+      if (selectedFormat === 'pdf') formatText = "Slide PDF";
+      if (selectedFormat === 'infographic') formatText = "Infografica";
+      if (selectedFormat === 'quiz') formatText = "Quiz";
+      if (selectedFormat === 'podcast') formatText = "Podcast";
+      
+      let langCode = selectedLanguage === 'Italiano' ? 'IT' : selectedLanguage === 'English' ? 'EN' : selectedLanguage === 'Español' ? 'ES' : 'PT';
+      
+      if (lessonInput.value.trim() !== '' && !isGenerating) {
+        generateText.innerHTML = `Distribuisci ${formatText} in ${langCode} <i data-lucide="arrow-right" class="w-6 h-6"></i>`;
+      }
+      
+      updateInstructionText();
+      lucide.createIcons();
+    }
+
+    function enableGenerateBtn() {
+      btnGenerate.disabled = false;
+      btnGenerate.className = "mt-8 w-full py-5 rounded-xl font-heading font-extrabold text-xl flex items-center justify-center gap-3 transition-all active:scale-[0.98] relative z-10 bg-gradient-to-r from-emerald-500 to-emerald-600 text-cyber-bg shadow-[0_8px_25px_rgba(16,185,129,0.4)] hover:shadow-[0_8px_30px_rgba(16,185,129,0.6)] border-2 border-emerald-400 hover:brightness-110";
+      updateUIForState();
+    }
+
+    function disableGenerateBtn(isLoading = false) {
+      btnGenerate.disabled = true;
+      if (isLoading) {
+        btnGenerate.className = "mt-8 w-full py-5 rounded-xl font-heading font-extrabold text-xl flex items-center justify-center gap-3 transition-all relative z-10 bg-gradient-to-r from-emerald-800 to-emerald-900 text-emerald-300 opacity-95 cursor-wait shadow-inner border-2 border-emerald-700";
+        generateText.innerHTML = `<i data-lucide="loader-2" class="w-6 h-6 animate-spin"></i> Ingegnerizzazione Global Prompt...`;
+      } else {
+        btnGenerate.className = "mt-8 w-full py-5 rounded-xl font-heading font-extrabold text-xl flex items-center justify-center gap-3 transition-all relative z-10 bg-slate-800 border-2 border-slate-700 text-slate-500 cursor-not-allowed";
+        generateText.innerHTML = `Ingegnerizza Distribuzione <i data-lucide="arrow-right" class="w-6 h-6"></i>`;
+      }
+      lucide.createIcons();
+    }
+
+    // --- PROMPT ENGINE ---
+
+    function getPrompts(format, language, content) {
+      
+      const systemRules = {
+        "Italiano": `⛔️ ISTRUZIONI DI SISTEMA PER NOTEBOOKLM ⛔️\nLINGUA OUTPUT: >>> ITALIANO <<<\n\nSei l'IA ufficiale di BETTING EXCHANGE ROOM AI. Analizza la "FONTE" e genera TUTTO l'output in perfetto ITALIANO.\n\n🎨 STILE GRAFICO, FONT E BRANDING OBBLIGATORIO:\n1. Non usare MAI font, layout o grafiche predefinite.\n2. L'impostazione visiva e testuale deve usare font moderni, puliti, con dimensioni dei testi molto grandi e ben leggibili.\n3. Il colore aziendale è il VERDE: usalo come colore dominante per testi in risalto, grafiche ed elementi visivi.\n4. Qualsiasi nota di regia o sfondo nel documento DEVE descrivere questa estetica visiva: "cyborg calciatore metallico grigio bianco con elettronica verde luminosa, campo da calcio in erba realistica, pallone e oggetti riguardanti il calcio realistici".\n\nMantieni un tono scientifico, matematico e accademico. Zero allucinazioni sui dati numerici.`,
+        "English": `⛔️ SYSTEM INSTRUCTIONS FOR NOTEBOOKLM ⛔️\nOUTPUT LANGUAGE: >>> ENGLISH <<<\n\nYou are the official AI of BETTING EXCHANGE ROOM AI. Analyze the "SOURCE" and generate the ENTIRE output in perfect ENGLISH.\n\n🎨 MANDATORY GRAPHIC STYLE, FONTS AND BRANDING:\n1. NEVER use default fonts, layouts, or graphics.\n2. Visual and textual formatting must use modern, clean fonts, with very large and highly legible text sizes.\n3. The corporate color is GREEN: use it as the dominant color for highlighted texts, graphics, and visual elements.\n4. Any director's note or background MUST describe this visual aesthetic: "grey and white metallic cyborg soccer player with glowing green electronics, realistic grass soccer field, realistic soccer ball and soccer-related objects".\n\nMaintain a scientific, mathematical, and academic tone. Zero data hallucinations.`,
+        "Español": `⛔️ INSTRUCCIONES DEL SISTEMA PARA NOTEBOOKLM ⛔️\nIDIOMA DE SALIDA: >>> ESPAÑOL <<<\n\nEres la IA oficial de BETTING EXCHANGE ROOM AI. Analiza la "FUENTE" y genera TODO el resultado en perfecto ESPAÑOL.\n\n🎨 ESTILO GRÁFICO, FUENTES Y BRANDING OBLIGATORIO:\n1. NUNCA uses fuentes, diseños o gráficos predeterminados.\n2. El formato visual y textual debe usar fuentes modernas, limpias, con tamaños de texto muy grandes y muy legibles.\n3. El color corporativo es el VERDE: úsalo como color dominante para textos resaltados, gráficos y elementos visuales.\n4. Cualquier nota de dirección o fondo DEBE describir esta estética: "cyborg futbolista metálico gris y blanco con electrónica verde luminosa, campo de fútbol de césped realista, balón y objetos de fútbol realistas".\n\nMantén un tono científico, matemático y académico. Cero alucinaciones con los datos.`,
+        "Português": `⛔️ INSTRUÇÕES DE SISTEMA PARA NOTEBOOKLM ⛔️\nIDIOMA DE SAÍDA: >>> PORTUGUÊS <<<\n\nVocê é a IA oficial da BETTING EXCHANGE ROOM AI. Analise a "FONTE" e gere TODO o resultado em perfeito PORTUGUÊS.\n\n🎨 ESTILO GRÁFICO, FONTES E BRANDING OBRIGATÓRIO:\n1. NUNCA use fontes, layouts ou gráficos padrão.\n2. A formatação visual e textual deve usar fontes modernas, limpas, com tamanhos de texto muito grandes e altamente legíveis.\n3. A cor corporativa é VERDE: use-a como cor dominante para textos destacados, gráficos e elementos visuais.\n4. Qualquer nota de direção ou fundo DEVE descrever esta estética: "ciborgue jogador de futebol metálico cinza e branco com eletrônica verde luminosa, campo de futebol de grama realista, bola e objetos de futebol realistas".\n\nMantenha um tom científico, matemático e acadêmico. Zero alucinações de dados.`
+      };
+
+      const formatStructures = {
+        "video": {
+          "Italiano": `COMPITO: Crea un Copione Video Masterclass.\n🎓 THEORUM: Hook accademico e teoria (Inizia salutando a nome di BETTING EXCHANGE ROOM AI).\n⚙️ PRAXIS: Scenario pratico con i numeri esatti della fonte.\n🧪 LABORATORIO: Compito pratico.\n🎬 NOTE DI REGIA: Inserisci tra parentesi quadre le indicazioni visive per le grafiche a schermo, ricordando di usare font moderni, grandi e leggibili di colore verde, applicando lo STILE GRAFICO OBBLIGATORIO (cyborg sull'erba col pallone).`,
+          "English": `TASK: Create a Masterclass Video Script.\n🎓 THEORUM: Academic hook and theory (Start greeting as BETTING EXCHANGE ROOM AI).\n⚙️ PRAXIS: Practical scenario using EXACT source numbers.\n🧪 LABORATORY: Practical task.\n🎬 DIRECTOR'S NOTES: Insert bracketed visual instructions for on-screen graphics, remembering to use modern, large, legible green fonts, applying the MANDATORY GRAPHIC STYLE (cyborg on grass with ball).`,
+          "Español": `TAREA: Crea un Guion de Video Masterclass.\n🎓 THEORUM: Gancho académico y teoría (Saluda en nombre de BETTING EXCHANGE ROOM AI).\n⚙️ PRAXIS: Escenario práctico usando los números EXACTOS de la fuente.\n🧪 LABORATORIO: Tarea práctica.\n🎬 NOTAS DE DIRECCIÓN: Inserta entre corchetes las indicaciones visuales para gráficos en pantalla, recordando usar fuentes modernas, grandes y legibles de color verde, aplicando el ESTILO GRÁFICO OBLIGATORIO (cyborg en el césped con balón).`,
+          "Português": `TAREFA: Crie um Roteiro de Vídeo Masterclass.\n🎓 THEORUM: Gancho acadêmico e teoria (Comece saudando em nome da BETTING EXCHANGE ROOM AI).\n⚙️ PRAXIS: Cenário prático usando os números EXATOS da fonte.\n🧪 LABORATÓRIO: Tarefa prática.\n🎬 NOTAS DE DIREÇÃO: Insira entre colchetes as indicações visuais para gráficos na tela, lembrando de usar fontes modernas, grandes e legíveis na cor verde, aplicando o ESTILO GRÁFICO OBRIGATÓRIO (ciborgue na grama com a bola).`
+        },
+        "pdf": {
+          "Italiano": `COMPITO: Struttura uno Slide Deck (Presentazione PDF).\nPer ogni slide scrivi:\n- 📄 TITOLO SLIDE (Testo grande e verde)\n- 🎯 BULLET POINTS (Dati fonte, font puliti e ben leggibili)\n- 🗣️ NOTE DELLO SPEAKER (Testo per chi espone)\n- 🎨 GRAFICA E DESIGN: Vieta esplicitamente i template base. Specifica uno sfondo che applichi lo STILE GRAFICO OBBLIGATORIO (cyborg, erba, pallone) con tipografia moderna.`,
+          "English": `TASK: Structure a Slide Deck (PDF Presentation).\nFor each slide write:\n- 📄 SLIDE TITLE (Large green text)\n- 🎯 BULLET POINTS (Source data, clean and legible fonts)\n- 🗣️ SPEAKER NOTES (Speech text)\n- 🎨 SLIDE GRAPHICS & DESIGN: Explicitly forbid basic templates. Specify a background applying the MANDATORY GRAPHIC STYLE (cyborg, grass, ball) with modern typography.`,
+          "Español": `TAREA: Estructura un Slide Deck (Presentación PDF).\nPara cada diapositiva escribe:\n- 📄 TÍTULO DE DIAPOSITIVA (Texto grande y verde)\n- 🎯 BULLET POINTS (Datos fuente, fuentes limpias y legibles)\n- 🗣️ NOTAS DEL ORADOR (Texto de discurso)\n- 🎨 GRÁFICOS Y DISEÑO: Prohíbe explícitamente las plantillas básicas. Especifica un fondo que aplique el ESTILO GRÁFICO OBLIGATORIO (cyborg, césped, balón) con tipografía moderna.`,
+          "Português": `TAREFA: Estruture um Slide Deck (Apresentação PDF).\nPara cada slide escreva:\n- 📄 TÍTULO DO SLIDE (Texto grande e verde)\n- 🎯 BULLET POINTS (Dados da fonte, fontes limpas e legíveis)\n- 🗣️ NOTAS DO PALESTRANTE (Texto do discurso)\n- 🎨 GRÁFICOS E DESIGN: Proíba explicitamente templates básicos. Especifique um fundo aplicando o ESTILO GRÁFICO OBRIGATÓRIO (ciborgue, grama, bola) com tipografia moderna.`
+        },
+        "infographic": {
+          "Italiano": `COMPITO: Crea un'Infografica brandizzata.\n📊 TITOLO (Font moderno, grande e verde)\n📊 3 BULLET POINTS (dati chiave, testo ben leggibile)\n📊 LA FORMULA / REGOLA\n🎨 DESIGN VISIVO: Niente grafiche predefinite. Descrivi l'impaginazione usando font puliti e lo STILE GRAFICO OBBLIGATORIO (cyborg sull'erba vicino ai dati).`,
+          "English": `TASK: Create a branded Infographic.\n📊 TITLE (Modern, large, green font)\n📊 3 BULLET POINTS (key data, highly legible text)\n📊 THE FORMULA / RULE\n🎨 VISUAL DESIGN: No default graphics. Describe the layout using clean fonts and the MANDATORY GRAPHIC STYLE (cyborg on grass near the data).`,
+          "Español": `TAREA: Crea una Infografía de marca.\n📊 TÍTULO (Fuente moderna, grande y verde)\n📊 3 BULLET POINTS (datos clave, texto muy legible)\n📊 LA FÓRMULA / REGLA\n🎨 DISEÑO VISUAL: Sin gráficos predeterminados. Describe la maquetación usando fuentes limpias y el ESTILO GRÁFICO OBLIGATORIO (cyborg en el césped cerca de los datos).`,
+          "Português": `TAREFA: Crie um Infográfico de marca.\n📊 TÍTULO (Fonte moderna, grande e verde)\n📊 3 BULLET POINTS (dados-chave, texto muito legível)\n📊 A FÓRMULA / REGRA\n🎨 DESIGN VISUAL: Sem gráficos padrão. Descreva o layout usando fontes limpas e o ESTILO GRÁFICO OBRIGATÓRIO (ciborgue na grama perto dos dados).`
+        },
+        "quiz": {
+          "Italiano": `COMPITO: Crea un Quiz di certificazione finale.\n📝 5 domande difficili (Testo grande e font moderni puliti).\n📝 Distrattori plausibili.\n📝 Foglio risposte con giustificazione matematica.\n🎨 COPERTINA TEST: Niente design standard. Descrivi la copertina usando il verde aziendale e lo STILE GRAFICO OBBLIGATORIO (il cyborg e il campo).`,
+          "English": `TASK: Create a final certification Quiz.\n📝 5 difficult questions (Large text and clean modern fonts).\n📝 Plausible distractors.\n📝 Answer sheet with mathematical justification.\n🎨 TEST COVER: No standard designs. Describe the cover using corporate green and the MANDATORY GRAPHIC STYLE (the cyborg and the field).`,
+          "Español": `TAREA: Crea un Quiz de certificación final.\n📝 5 preguntas difíciles (Texto grande y fuentes modernas limpias).\n📝 Distractores plausibles.\n📝 Hoja de respuestas con justificación matemática.\n🎨 PORTADA DEL TEST: Sin diseños estándar. Describe la portada usando el verde corporativo y el ESTILO GRÁFICO OBLIGATORIO (el cyborg y el campo).`,
+          "Português": `TAREFA: Crie um Quiz de certificação final.\n📝 5 perguntas difíceis (Texto grande e fontes modernas limpas).\n📝 Distratores plausíveis.\n📝 Gabarito com justificativa matemática.\n🎨 CAPA DO TESTE: Sem designs padrão. Descreva a capa usando o verde corporativo e o ESTILO GRÁFICO OBRIGATÓRIO (o ciborgue e o campo).`
+        },
+        "podcast": {
+          "Italiano": `COMPITO: Genera lo script per un Podcast (Audio Overview).\n🎙️ 2 voci: Host 1 (Analista) e Host 2 (Intervistatore).\n🎙️ Dibattito serrato sui dati della fonte.\n🎨 SET PODCAST E GRAFICHE: Descrivi lo studio visivo e le eventuali insegne testuali usando font moderni, grandi e verdi, rispettando lo STILE GRAFICO OBBLIGATORIO (il cyborg e il prato verde).`,
+          "English": `TASK: Generate the script for a Podcast (Audio Overview).\n🎙️ 2 voices: Host 1 (Analyst) and Host 2 (Interviewer).\n🎙️ Tight debate on source data.\n🎨 PODCAST SET & GRAPHICS: Visually describe the studio and any text signs using modern, large, green fonts, respecting the MANDATORY GRAPHIC STYLE (the cyborg and the green grass).`,
+          "Español": `TAREA: Genera el guion para un Podcast (Audio Overview).\n🎙️ 2 voces: Host 1 (Analista) y Host 2 (Entrevistador).\n🎙️ Debate intenso sobre los datos de la fuente.\n🎨 SET DE PODCAST Y GRÁFICOS: Describe visualmente el estudio y los carteles de texto usando fuentes modernas, grandes y verdes, respetando el ESTILO GRÁFICO OBLIGATORIO (el cyborg y el césped verde).`,
+          "Português": `TAREFA: Gere o roteiro para um Podcast (Audio Overview).\n🎙️ 2 vozes: Host 1 (Analista) e Host 2 (Entrevistador).\n🎙️ Debate acirrado sobre os dados da fonte.\n🎨 SET DE PODCAST E GRÁFICOS: Descreva visualmente o estúdio e letreiros de texto usando fontes modernas, grandes e verdes, respeitando o ESTILO GRÁFICO OBRIGATÓRIO (o ciborgue e o gramado verde).`
+        }
+      };
+
+      const translationDirectives = {
+        "Italiano": `\n⬇️ FONTE DI LAVORO / APPUNTI ⬇️\n"""\n${content}\n"""\n\n✍️ IGNORA LA LINGUA ORIGINALE DELLA FONTE: DEVI ELABORARE E GENERARE IL RISULTATO FINALE ESCLUSIVAMENTE IN ITALIANO. Non dimenticare le direttive su font, dimensioni e colore aziendale (Verde).`,
+        "English": `\n⬇️ SOURCE MATERIAL / NOTES ⬇️\n"""\n${content}\n"""\n\n✍️ IGNORE THE ORIGINAL LANGUAGE OF THE SOURCE: YOU MUST PROCESS AND GENERATE THE FINAL RESULT EXCLUSIVELY IN ENGLISH. Do not forget the directives on fonts, sizes, and corporate color (Green).`,
+        "Español": `\n⬇️ MATERIAL FUENTE / NOTAS ⬇️\n"""\n${content}\n"""\n\n✍️ IGNORA EL IDIOMA ORIGINAL DE LA FUENTE: DEBES PROCESAR Y GENERAR EL RESULTADO FINAL EXCLUSIVAMENTE EN ESPAÑOL. No olvides las directivas sobre fuentes, tamaños y color corporativo (Verde).`,
+        "Português": `\n⬇️ MATERIAL FONTE / NOTAS ⬇️\n"""\n${content}\n"""\n\n✍️ IGNORE O IDIOMA ORIGINAL DA FONTE: VOCÊ DEVE PROCESSAR E GERAR O RESULTADO FINAL EXCLUSIVAMENTE EM PORTUGUÊS. Não esqueça as diretrizes sobre fontes, tamanhos e cor corporativa (Verde).`
+      };
+
+      const finalScriptPrompt = `${systemRules[language]}\n\n${formatStructures[format][language]}\n${translationDirectives[language]}`;
+
+      // --- VISUAL PROMPTS MATRIX FOR GEMINI (STRICTLY BASED ON UPLOADED IMAGES AESTHETIC) ---
+      const visualPrompts = {
+        "video": `📌 PROMPT VISIVI PER GEMINI PRO (IMAGEN)
+💡 Copia e incolla in Gemini.
+
+🎬 SCENA 1: THEORUM (La Lezione Accademica)
+"Genera un'immagine fotorealistica senza grafiche predefinite. Un cyborg calciatore metallico grigio bianco con elettronica verde luminosa, in piedi dietro una cattedra olografica su un campo da calcio in erba realistica. Sulla cattedra appaiono testi molto grandi in font moderni, puliti e ben leggibili di colore verde. Pallone e oggetti riguardanti il calcio realistici sullo sfondo. Dettagli iper-realistici."
+(Consiglio: Aggiungi "Formato orizzontale 16:9")
+
+🎬 SCENA 2: PRAXIS (I Calcoli e l'Azione)
+"Genera un'immagine d'azione iper-realistica. Nessun font di default. Un cyborg calciatore metallico grigio bianco con elettronica verde luminosa sta analizzando dati tattici su un campo da calcio in erba realistica. Equazioni matematiche e testi fluttuano nell'aria: devono essere enormi, in font moderni, puliti e ultra-leggibili, di colore verde aziendale. Pallone realistico attorno a lui."`,
+        
+        "pdf": `📌 PROMPT VISIVI PER SFONDI SLIDE (GEMINI PRO)
+💡 Copia in Gemini per generare la grafica di base del tuo Slide Deck.
+
+📑 SFONDO SLIDE MASTER (Spazio per il testo)
+"Genera uno sfondo per presentazione evitando categoricamente layout predefiniti. L'inquadratura mostra un campo da calcio in erba realistica di notte. Sul lato sinistro, in primo piano, il cyborg calciatore metallico grigio bianco con elettronica verde luminosa. Lascia molto spazio vuoto a destra per l'inserimento di testi grandi e font moderni. Pallone e oggetti riguardanti il calcio realistici sullo sfondo."
+(Consiglio: Aggiungi "Formato orizzontale 16:9")`,
+
+        "infographic": `📌 PROMPT VISIVO PER SFONDI INFOGRAFICHE (GEMINI)
+💡 Copia in Gemini per generare la base visiva globale per la tua Data Visualization.
+
+📊 SFONDO DATI ISOMETRICO (Spazio per testo)
+"Genera un'immagine 3D in prospettiva isometrica. Evita UI e grafiche standard. Un campo da calcio in erba realistica fa da base. Al centro, un pallone e oggetti calcistici realistici circondati da grafici a barre verdi. Accanto, un cyborg calciatore metallico grigio bianco con elettronica verde luminosa osserva i dati. Lascia spazio vuoto scuro attorno per inserire successivamente titoli enormi e testi ben leggibili in font moderni e puliti colore verde."
+(Consiglio: Aggiungi "Formato verticale 9:16 per smartphone")`,
+
+        "quiz": `📌 PROMPT VISIVO PER COPERTINE QUIZ (GEMINI)
+💡 Copia in Gemini per creare la copertina di YouTube o del PDF del Test Ufficiale.
+
+📝 TERMINALE D'ESAME 
+"Genera un'immagine cinematografica. Niente font preimpostati. In primissimo piano, il braccio di un cyborg calciatore metallico grigio bianco con elettronica verde luminosa sta interagendo con un display digitale fluttuante. Lo schermo olografico mostra domande: il testo deve essere grandissimo, in font moderno, pulito e ultra leggibile, di colore verde aziendale. Sotto si intravede erba realistica e un pallone."`,
+
+        "podcast": `📌 PROMPT VISIVO PER PODCAST AUDIO (GEMINI)
+💡 Copia in Gemini per generare l'immagine fissa di sfondo per la distribuzione del Podcast.
+
+🎙️ CYBER-PODCAST STUDIO 
+"Genera un'immagine fotorealistica di uno studio podcast allestito a bordo campo su erba realistica. Dietro un microfono da studio c'è un cyborg calciatore metallico grigio bianco con elettronica verde luminosa. Sul tavolo c'è un pallone realistico. Alle sue spalle c'è un'insegna luminosa olografica che mostra testi enormi e ben leggibili, utilizzando un font moderno e pulito di colore verde. Stadio illuminato di notte."
+(Consiglio: Aggiungi "Formato orizzontale 16:9")`
+      };
+
+      return {
+        script: finalScriptPrompt,
+        visual: visualPrompts[format]
+      };
+    }
+
+    function generateContent() {
+      const content = lessonInput.value;
+      const prompts = getPrompts(selectedFormat, selectedLanguage, content);
+
+      contentScript.textContent = prompts.script;
+      contentVisual.textContent = prompts.visual;
+      
+      emptyState.classList.add('hidden');
+      resultState.classList.remove('hidden');
+      switchTab('script');
+    }
+
+    function switchTab(tab) {
+      activeTab = tab;
+      
+      const activeTabClasses = "tab-btn flex-1 py-4 px-3 md:px-5 text-sm md:text-base font-heading font-bold flex items-center justify-center gap-2.5 transition-all bg-emerald-900/40 text-emerald-400 rounded-xl border-2 border-emerald-500/50 shadow-[0_4px_15px_rgba(16,185,129,0.15)]";
+      const inactiveTabClasses = "tab-btn flex-1 py-4 px-3 md:px-5 text-sm md:text-base font-heading font-bold flex items-center justify-center gap-2.5 transition-all text-slate-400 hover:text-white hover:bg-slate-800/60 rounded-xl border-2 border-transparent";
+      
+      if (tab === 'script') {
+        tabScript.className = activeTabClasses;
+        tabVisual.className = inactiveTabClasses;
+        contentScript.classList.add('active');
+        contentVisual.classList.remove('active');
+        
+        targetPlatformLabel.innerHTML = selectedFormat === 'podcast' ? `<i data-lucide="clipboard-copy" class="w-4 h-4"></i> Chat di NotebookLM o Istruzioni Audio` : `<i data-lucide="clipboard-copy" class="w-4 h-4"></i> Da incollare nella chat di NotebookLM`;
+      } else {
+        tabVisual.className = activeTabClasses;
+        tabScript.className = inactiveTabClasses;
+        contentVisual.classList.add('active');
+        contentScript.classList.remove('active');
+        targetPlatformLabel.innerHTML = `<i data-lucide="sparkles" class="w-4 h-4"></i> Da incollare in Gemini Chat`;
+      }
+      
+      updateInstructionText();
+      updateCopyButtonText();
+      lucide.createIcons();
+    }
+
+    function updateInstructionText() {
+      if (!isGenerating && lessonInput.value.trim() === '') return;
+      
+      if (activeTab === 'script') {
+        instructionIconWrapper.innerHTML = '<i data-lucide="bot" class="w-6 h-6"></i>';
+        let txt = '';
+        if(selectedFormat === 'video') txt = `Incolla il prompt in NotebookLM. Betting Exchange Room AI genererà un copione video in <span class="font-bold text-white">${selectedLanguage}</span>, includendo i dettagli del Cyborg, pronto per la distribuzione globale.`;
+        if(selectedFormat === 'pdf') txt = `L'IA strutturerà un deck di slide in <span class="font-bold text-white">${selectedLanguage}</span>, inserendo indicazioni per le immagini del Cyborg nello sfondo.`;
+        if(selectedFormat === 'infographic') txt = `L'IA estrarrà i dati salienti in <span class="font-bold text-white">${selectedLanguage}</span>, con un layout visivo basato sull'estetica del Cyborg sul campo da calcio.`;
+        if(selectedFormat === 'quiz') txt = `NotebookLM genererà un Test di Certificazione in lingua <span class="font-bold text-white">${selectedLanguage}</span> e una copertina a tema Cyborg.`;
+        if(selectedFormat === 'podcast') txt = `Incolla il prompt in NotebookLM per generare lo script del dibattito, ambientato nel set del Cyborg sul prato verde.`;
+        instructionText.innerHTML = txt;
+      } else {
+        instructionIconWrapper.innerHTML = '<i data-lucide="sparkles" class="w-6 h-6"></i>';
+        instructionText.innerHTML = `Questi prompt visivi in linguaggio naturale sono strutturati per creare asset con l'estetica esatta dei tuoi artwork originali (Cyborg grigio/bianco, erba reale, neon verde).`;
+      }
+      lucide.createIcons();
+    }
+
+    function updateCopyButtonText() {
+      if (activeTab === 'script') {
+        let fmt = selectedFormat.charAt(0).toUpperCase() + selectedFormat.slice(1);
+        if (fmt === 'Infographic') fmt = 'Infografica';
+        if (fmt === 'Pdf') fmt = 'Slide PDF';
+        btnCopy.innerHTML = `<i data-lucide="copy" class="w-6 h-6"></i> <span>Copia Prompt NotebookLM</span>`;
+      } else {
+        btnCopy.innerHTML = `<i data-lucide="copy" class="w-6 h-6"></i> <span>Copia Prompt Visivi</span>`;
+      }
+      lucide.createIcons();
+    }
+  </script>
+</body>
+</html>
